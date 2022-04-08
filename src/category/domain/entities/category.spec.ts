@@ -1,66 +1,66 @@
 import { Category, CategoryProperties } from './category';
 import { omit } from 'lodash';
-import UniqueEntityId from '../../../@seedwork/domain/unique-entity-id.vo';
- 
+import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo';
+
 describe("Category Unit Tests", () => {
 
     test('Constructor of category', () => {
 
-        let category = new Category({name: 'Movie'});
+        let category = new Category({ name: 'Movie' });
         let props = omit(category.props, 'created_at');
         expect(props).toStrictEqual({
-            name: 'Movie', 
+            name: 'Movie',
             description: null,
             is_active: true
         });
-        expect(category.props.created_at).toBeInstanceOf(Date);    
+        expect(category.props.created_at).toBeInstanceOf(Date);
 
 
-        category = new Category({ 
-            name: 'Movie', 
-            description: 'some description', 
-            is_active: false,           
+        category = new Category({
+            name: 'Movie',
+            description: 'some description',
+            is_active: false,
         });
         let created_at = new Date();
         expect(category.props).toStrictEqual({
-            name: 'Movie', 
+            name: 'Movie',
             description: 'some description',
             is_active: false,
             created_at
         });
 
 
-        category = new Category({ 
-            name: 'Movie', 
-            description: 'other description',                      
+        category = new Category({
+            name: 'Movie',
+            description: 'other description',
         });
         expect(category.props).toMatchObject({
-            name: 'Movie', 
-            description: 'other description'           
+            name: 'Movie',
+            description: 'other description'
         });
 
 
-        category = new Category({ 
-            name: 'Movie', 
-            is_active: true                      
+        category = new Category({
+            name: 'Movie',
+            is_active: true
         });
         expect(category.props).toMatchObject({
-            name: 'Movie', 
-            is_active: true          
+            name: 'Movie',
+            is_active: true
         });
 
         created_at = new Date();
-        
-        category = new Category({ 
-            name: 'Movie',      
-            created_at                          
+
+        category = new Category({
+            name: 'Movie',
+            created_at
         });
         expect(category.props).toMatchObject({
-            name: 'Movie', 
-            created_at         
+            name: 'Movie',
+            created_at
         });
-                  
-         
+
+
     })
 
     test('id field', () => {
@@ -70,17 +70,17 @@ describe("Category Unit Tests", () => {
         }
 
         const data: CategoryData[] = [
-            { props: {name: 'Movie' } },
-            { props: {name: 'Movie' }, id: null },
-            { props: {name: 'Movie' }, id: undefined },
-            { props: {name: 'Movie'},  id: new UniqueEntityId() },            
+            { props: { name: 'Movie' } },
+            { props: { name: 'Movie' }, id: null },
+            { props: { name: 'Movie' }, id: undefined },
+            { props: { name: 'Movie' }, id: new UniqueEntityId() },
         ];
 
         data.forEach(i => {
             const category = new Category(i.props, i.id as any);
             expect(category.id).not.toBeNull();
             expect(category.id).toBeInstanceOf(UniqueEntityId);
-        });    
+        });
 
     })
 
@@ -109,20 +109,20 @@ describe("Category Unit Tests", () => {
         category = new Category({
             name: 'Movie'
         });
-        category['description'] = 'other description';        
+        category['description'] = 'other description';
         expect(category.description).toBe('other description');
 
-        category['description'] = undefined;      
+        category['description'] = undefined;
         expect(category.description).toBeNull();
 
-        category['description'] = null;      
+        category['description'] = null;
         expect(category.description).toBeNull();
-        
+
     });
 
 
     test('Getter and setter of is_active prop', () => {
-       
+
         let category = new Category({
             name: 'Movie'
         });
@@ -139,11 +139,11 @@ describe("Category Unit Tests", () => {
             is_active: false
         });
         expect(category.is_active).toBeFalsy();
-        
+
     });
 
     test('Getter of created_at prop', () => {
-        
+
         let category = new Category({
             name: 'Movie'
         });
@@ -157,5 +157,5 @@ describe("Category Unit Tests", () => {
         expect(category.created_at).toBe(created_at);
 
     });
-    
+
 });
