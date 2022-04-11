@@ -79,7 +79,7 @@ describe("Category Unit Tests", () => {
         data.forEach(i => {
             const category = new Category(i.props, i.id as any);
             expect(category.id).not.toBeNull();
-            expect(category.id).toBeInstanceOf(UniqueEntityId);
+            expect(category.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
         });
 
     })
@@ -91,6 +91,19 @@ describe("Category Unit Tests", () => {
         });
         expect(category.name).toBe('Movie');
 
+    });
+
+
+    test('Getter and setter of name prop', () => {
+
+        let category = new Category({
+            name: 'Movie'            
+        });
+        expect(category.name).toBe('Movie');
+
+        category["name"] = "other name";
+        expect(category.name).toBe('other name');
+        
     });
 
     test('Getter and setter of description prop', () => {
@@ -155,6 +168,40 @@ describe("Category Unit Tests", () => {
             created_at
         });
         expect(category.created_at).toBe(created_at);
+
+    });
+
+
+    test('Should update a category', () => {
+
+        let category = new Category({
+            name: 'Movie'
+        });
+        category.update('Documentary','Testing');
+        expect(category.name).toBe('Documentary');
+        expect(category.description).toBe('Testing');
+
+    });
+
+    test('Should activate a category', () => {
+
+        let category = new Category({
+            name: 'Movie',
+            is_active: true
+        });
+        category.activate();        
+        expect(category.is_active).toBeTruthy();
+
+    });
+
+    test('Should deactivate a category', () => {
+
+        let category = new Category({
+            name: 'Movie',
+            is_active: false
+        });
+        category.deactivate();        
+        expect(category.is_active).toBeFalsy();
 
     });
 

@@ -1,4 +1,5 @@
-import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo'
+import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo';
+import Entity from '../../../@seedwork/domain/entity/entity';
 
 export type CategoryProperties = {
     name: string;
@@ -7,19 +8,46 @@ export type CategoryProperties = {
     created_at?: Date;
 }
 
-export class Category {
-
-    public readonly id: UniqueEntityId;
+export class Category extends Entity<CategoryProperties> {
 
     constructor(readonly props: CategoryProperties, id?: UniqueEntityId) {
-        this.id = id || new UniqueEntityId();
+        if (!props.name){
+            throw new Error('Name is required');
+        }
+        if (props.name.length > 255){
+            throw new Error('Name must be less than 255 chars');
+        }
+        super(props, id);
         this.description = this.props.description;
         this.is_active = this.props.is_active;
         this.props.created_at = this.props.created_at ?? new Date();
     }
 
+    update(name: string, description: string): void {
+        if (!name){
+            throw new Error('Name is required');
+        }
+        if (name.length > 255){
+            throw new Error('Name must be less than 255 chars');
+        }
+        this.name = name;
+        this.description = description;
+    }
+
+    activate() {
+        this.props.is_active = true;
+    }
+
+    deactivate() {
+        this.props.is_active = false;
+    }
+  
     get name(): string {
         return this.props.name
+    }
+
+    private set name(value){
+        this.props.name = value;
     }
 
     get description(): string | undefined {
@@ -44,3 +72,5 @@ export class Category {
 }
 
 
+const category = new Category({ name: 'test' });
+const obj = category.toJSON();
