@@ -11,25 +11,13 @@ export type CategoryProperties = {
 export class Category extends Entity<CategoryProperties> {
 
     constructor(readonly props: CategoryProperties, id?: UniqueEntityId) {
-        if (!props.name){
-            throw new Error('Name is required');
-        }
-        if (props.name.length > 255){
-            throw new Error('Name must be less than 255 chars');
-        }
         super(props, id);
         this.description = this.props.description;
         this.is_active = this.props.is_active;
         this.props.created_at = this.props.created_at ?? new Date();
     }
 
-    update(name: string, description: string): void {
-        if (!name){
-            throw new Error('Name is required');
-        }
-        if (name.length > 255){
-            throw new Error('Name must be less than 255 chars');
-        }
+    update(name: string, description: string): void {    
         this.name = name;
         this.description = description;
     }
